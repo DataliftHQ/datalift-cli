@@ -1,0 +1,73 @@
+project_name: datalift
+
+before:
+  hooks:
+    - go mod download
+    - go generate ./...
+
+builds:
+  - env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+      - arm
+      - ppc64le
+      - s390x
+    goarm:
+      - 7
+    flags:
+      - -trimpath
+    ldflags:
+      - -s -w
+      - -X github.com/DataliftHQ/datalift-cli/cmd/datalift/version.Branch={{ .Env.BRANCH}}
+      - -X github.com/DataliftHQ/datalift-cli/cmd/datalift/version.BuildTime={{.Date}}
+      - -X github.com/DataliftHQ/datalift-cli/cmd/datalift/version.GitCommit={{.Commit}}
+      - -X github.com/DataliftHQ/datalift-cli/cmd/datalift/version.Version={{.Version}}
+
+archives:
+  - format: tar.gz
+    # this name template makes the OS and Arch compatible with the results of uname.
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+      {{- if .Arm }}v{{ .Arm }}{{ end }}
+    # use zip for windows archives
+    format_overrides:
+    - goos: windows
+      format: zip
+
+checksum:
+  name_template: 'checksums.txt'
+
+snapshot:
+  name_template: "{{ .Tag }}-next"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+
+brews:
+  - name: datalift
+    tap:
+      owner: datalift
+      name: datalift
+    commit_author:
+      name: datalift-ci
+      email: support@datalift.io
+    folder: Formula
+    homepage: https://datalift.io/
+    description: Datalift CLI utility
+    test: |
+      system "#{bin}/datalift", "--version"
+    caveats: "❤ Thanks for installing the Datalift CLI!"
