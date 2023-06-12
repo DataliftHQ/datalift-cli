@@ -89,7 +89,7 @@ changelog:
 brews:
   - name: datalift
     tap:
-      owner: datalift
+      owner: DataliftHQ
       name: homebrew-datalift
     commit_author:
       name: datalift-ci
