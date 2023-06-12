@@ -2,7 +2,7 @@ project_name: datalift
 
 before:
   hooks:
-    - go mod download
+    - go mod tidy
     - go generate ./...
 
 report_sizes: true
