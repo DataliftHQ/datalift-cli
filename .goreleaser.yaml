@@ -87,7 +87,7 @@ brews:
   - name: datalift
     tap:
       owner: datalift
-      name: datalift
+      name: homebrew-datalift
     commit_author:
       name: datalift-ci
       email: support@datalift.io
