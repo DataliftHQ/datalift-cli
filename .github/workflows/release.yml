@@ -3,12 +3,9 @@ name: release
 on:
   push:
     branches:
-      - master
-      - release-*
+      - 'master'
     tags:
       - 'v*.*.*'
-  pull_request:
-    branches: [ master ]
 
 permissions:
   contents: write
