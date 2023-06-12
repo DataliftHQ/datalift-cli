@@ -1,5 +1,8 @@
 project_name: datalift
 
+env:
+  - GO111MODULE=on
+
 before:
   hooks:
     - go mod tidy
@@ -95,5 +98,11 @@ brews:
     homepage: https://datalift.io/
     description: Datalift CLI utility
     test: |
-      system "#{bin}/datalift", "--version"
+      system "#{bin}/datalift --version"
+    dependencies:
+      - name: go
+        type: optional
+      - name: git
+    install: |-
+      bin.install "datalift"
     caveats: "❤ Thanks for installing the Datalift CLI!"

@@ -9,24 +9,56 @@ on:
 
 permissions:
   contents: write
+  id-token: write
+  packages: write
 
 jobs:
   goreleaser:
+    env:
+      DOCKER_CLI_EXPERIMENTAL: "enabled"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      - uses: arduino/setup-task@v1
+        with:
+          version: 3.x
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: setup-snapcraft
+        run: |
+          sudo apt-get update
+          sudo apt-get -yq --no-install-suggests --no-install-recommends install snapcraft
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
-          go-version: 1.20
+          go-version: stable
+      - name: Set up Cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ./dist/*.deb
+            ./dist/*.rpm
+            ./dist/*.apk
+          key: ${{ github.ref }}
+      - name: Install cosign
+        uses: sigstore/cosign-installer@v3.0.5
+      - name: Check GoReleaser
+        run: |
+          goreleaser check
+        name: Diff
+        run: git diff
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
         with:
           distribution: goreleaser
           version: latest
           args: release --clean
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+
