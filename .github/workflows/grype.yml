@@ -1,0 +1,28 @@
+name: "grype"
+
+on:
+  push:
+    branches: ['main']
+    tags: ['v*']
+  pull_request:
+
+jobs:
+  scan-source:
+    name: scan-source
+    runs-on: ubuntu-latest
+
+    permissions:
+      security-events: write
+      actions: read
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Run Anchore container analysis
+        uses: anchore/scan-action@v3
+        with:
+          path: "."
+          fail-build: true
