@@ -12,10 +12,9 @@ on:
 
 jobs:
   golangci:
-    strategy:
-      matrix:
-        go: ['1.20']
-        os: [macos-latest]
+    permissions:
+      contents: read
+      pull-requests: read
     name: lint
     runs-on: ${{ matrix.os }}
     steps:
@@ -24,7 +23,7 @@ jobs:
       - name: Setup go
         uses: actions/setup-go@v4
         with:
-          go-version: ${{ matrix.go }}
+          go-version: stable
           cache: false
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v3
