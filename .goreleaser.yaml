@@ -168,8 +168,8 @@ docker_manifests:
       - "ghcr.io/datalifthq/datalift:{{ .Tag }}-arm64"
   - name_template: "ghcr.io/datalifthq/datalift:latest"
     image_templates:
-      - "ghcr.io/DataliftHQ/datalift:{{ .Tag }}-amd64"
-      - "ghcr.io/DataliftHQ/datalift:{{ .Tag }}-arm64"
+      - "ghcr.io/datalifthq/datalift:{{ .Tag }}-amd64"
+      - "ghcr.io/datalifthq/datalift:{{ .Tag }}-arm64"
 
 nfpms:
   - id: datalift
