@@ -15,7 +15,9 @@ CMD [ "-h" ]
 
 COPY scripts/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
-RUN ls
 
-COPY datalift-*.apk /tmp/
+#COPY datalift-*.apk /tmp/
+COPY . /tmp
+RUN ls /tmp
+
 RUN apk add --allow-untrusted /tmp/datalift_*.apk
