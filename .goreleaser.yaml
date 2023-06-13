@@ -82,7 +82,7 @@ changelog:
 
 archives:
   - name_template: >-
-      {{ .ProjectName }}-{{ .Os }}_{{ .Version }}_
+      {{ .ProjectName }}-{{ .Version }}_{{ .Os }}_
       {{- if eq .Arch "386" }}i386
       {{- else }}{{ .Arch }}{{ end }}
     format_overrides:
@@ -100,7 +100,7 @@ archives:
 brews:
   - tap:
       owner: DataliftHQ
-      name: homebrew-datalift
+      name: homebrew-tap
     folder: Formula
     goarm: "7"
     homepage: https://datalift.io/
@@ -124,7 +124,12 @@ brews:
     caveats: "❤ Thanks for installing the Datalift!"
 
 nfpms:
-  - maintainer: Datalift <support@datalift.io>
+  - id: datalift
+    file_name_template: >-
+      {{ .ProjectName }}-{{ .Version }}_{{ .Os }}_
+      {{- if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+    maintainer: Datalift <support@datalift.io>
     description: Command Line Interface for Datalift
     homepage: https://datalift.io
     license: MPL-2.0
@@ -176,8 +181,8 @@ scoops:
     description: Deliver Go binaries as fast and easily as possible
     license: MIT
 
-milestones:
-  - close: true
+sboms:
+  - artifacts: archive
 
 release:
   footer: |
