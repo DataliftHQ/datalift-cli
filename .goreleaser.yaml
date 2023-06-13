@@ -1,3 +1,5 @@
+project_name: datalift
+
 env:
   - GO111MODULE=on
 
@@ -77,21 +79,21 @@ changelog:
       order: 9999
 
 archives:
-  - name_template: >-
-      {{ .ProjectName }}_{{ .Version }}_
-      {{- if eq .Os "darwin" }}macOS
-      {{- else if eq .Os "linux" }}Linux
-      {{- else if eq .Os "openbsd" }}OpenBSD
-      {{- else if eq .Os "netbsd" }}NetBSD
-      {{- else if eq .Os "freebsd" }}FreeBSD
-      {{- else if eq .Os "dragonfly" }}DragonFlyBSD
-      {{- else}}{{- .Os }}{{ end }}-
-      {{- if eq .Arch "amd64" }}64bit
-      {{- else if eq .Arch "arm" }}ARM
-      {{- else if eq .Arch "arm64" }}ARM64
-      {{- else if eq .Arch "ppc64le" }}PPC64LE
-      {{- else }}{{ .Arch }}{{ end }}
-    format_overrides:
+#  - name_template: >-
+#      {{ .ProjectName }}_{{ .Version }}_
+#      {{- if eq .Os "darwin" }}macOS
+#      {{- else if eq .Os "linux" }}Linux
+#      {{- else if eq .Os "openbsd" }}OpenBSD
+#      {{- else if eq .Os "netbsd" }}NetBSD
+#      {{- else if eq .Os "freebsd" }}FreeBSD
+#      {{- else if eq .Os "dragonfly" }}DragonFlyBSD
+#      {{- else}}{{- .Os }}{{ end }}-
+#      {{- if eq .Arch "amd64" }}64bit
+#      {{- else if eq .Arch "arm" }}ARM
+#      {{- else if eq .Arch "arm64" }}ARM64
+#      {{- else if eq .Arch "ppc64le" }}PPC64LE
+#      {{- else }}{{ .Arch }}{{ end }}
+  - format_overrides:
       - goos: windows
         format: zip
     builds_info:
