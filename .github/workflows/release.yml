@@ -44,9 +44,9 @@ jobs:
             ./dist/*.rpm
             ./dist/*.apk
           key: ${{ github.ref }}
-      - name: Install cosign
+      - name: Install Cosign
         uses: sigstore/cosign-installer@v3.0.5
-      - name: Run UPX
+      - name: Install UPX
         uses: crazy-max/ghaction-upx@v2
         with:
           install-only: true
@@ -61,9 +61,10 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: snapcraft-login
-        if: startsWith(github.ref, 'refs/tags/v')
-        run: snapcraft login --with <(echo "${{ secrets.SNAPCRAFT_LOGIN }}")
+      - name: Snapcraft Login
+        env:
+          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_LOGIN }}
+        run: snapcraft login
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v4
         env:
