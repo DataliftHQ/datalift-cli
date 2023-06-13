@@ -48,11 +48,6 @@ jobs:
           key: ${{ github.ref }}
       - name: Install cosign
         uses: sigstore/cosign-installer@v3.0.5
-      - name: Check GoReleaser
-        run: |
-          goreleaser check
-      - name: Git Diff
-        run: git diff
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v4
         env:
