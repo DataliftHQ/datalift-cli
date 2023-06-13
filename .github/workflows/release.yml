@@ -51,7 +51,7 @@ jobs:
       - name: Check GoReleaser
         run: |
           goreleaser check
-        name: Diff
+      - name: Git Diff
         run: git diff
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v4
