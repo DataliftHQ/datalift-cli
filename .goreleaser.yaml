@@ -125,18 +125,18 @@ brews:
       man1.install "manpages/datalift.1.gz"
     caveats: "❤ Thanks for installing the Datalift!"
 
-nix:
-  - repository:
-      owner: DataliftHQ
-      name: nur
-    homepage: https://datalift.io
-    description: Command Line Interface for Datalift
-    license: MPL-2.0
-    install: |-
-      mkdir -p $out/bin
-      cp -vr ./datalift $out/bin/datalift
-      installManPage ./manpages/datalift.1.gz
-      installShellCompletion ./completions/*
+#nix:
+#  - repository:
+#      owner: DataliftHQ
+#      name: nur
+#    homepage: https://datalift.io
+#    description: Command Line Interface for Datalift
+#    license: MPL-2.0
+#    install: |-
+#      mkdir -p $out/bin
+#      cp -vr ./datalift $out/bin/datalift
+#      installManPage ./manpages/datalift.1.gz
+#      installShellCompletion ./completions/*
 
 nfpms:
   - maintainer: Datalift <support@datalift.io>
