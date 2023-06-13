@@ -84,6 +84,7 @@ archives:
   - name_template: >-
       {{ .ProjectName }}-{{ .Version }}_{{ .Os }}_
       {{- if eq .Arch "386" }}i386
+      {{- else if and (eq .Os "darwin" ) (eq .Arch "all") }}ubin
       {{- else }}{{ .Arch }}{{ end }}
     format_overrides:
       - goos: windows
@@ -179,7 +180,10 @@ scoops:
     folder: bucket
     homepage: https://goreleaser.com
     description: Deliver Go binaries as fast and easily as possible
-    license: MIT
+    license: MPL-2.0
+    commit_author:
+      name: datalift-ci
+      email: support@datalift.io
 
 sboms:
   - artifacts: archive
