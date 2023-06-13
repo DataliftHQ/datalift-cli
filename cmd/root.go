@@ -6,6 +6,7 @@ import (
 	"github.com/apex/log"
 	"github.com/apex/log/handlers/cli"
 	"github.com/spf13/cobra"
+	cobracompletefig "github.com/withfig/autocomplete-tools/integrations/cobra"
 )
 
 func Execute(version string, exit func(int), args []string) {
@@ -62,7 +63,10 @@ func newRootCmd(version string, exit func(int)) *rootCmd {
 	}
 
 	cmd.PersistentFlags().BoolVar(&root.debug, "debug", false, "enable debug mode")
-	cmd.AddCommand()
+	cmd.AddCommand(
+		newManCmd().cmd,
+		cobracompletefig.CreateCompletionSpecCommand(),
+	)
 
 	root.cmd = cmd
 	return root

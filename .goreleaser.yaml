@@ -1,12 +1,17 @@
-project_name: datalift
-
 env:
   - GO111MODULE=on
 
 before:
   hooks:
     - go mod tidy
-    - go generate ./...
+    - ./scripts/completions.sh
+    - ./scripts/manpages.sh
+
+snapshot:
+  name_template: "{{ incpatch .Version }}-next"
+
+gomod:
+  proxy: true
 
 report_sizes: true
 
@@ -20,35 +25,27 @@ builds:
     goarch:
       - "386"
       - amd64
-      - arm64
       - arm
-      - ppc64le
+      - arm64
+      - ppc64
       - s390x
     goarm:
       - "7"
+    ignore:
+      - goos: windows
+        goarch: arm
     mod_timestamp: "{{ .CommitTimestamp }}"
     flags:
       - -trimpath
     ldflags:
       - -s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{ .CommitDate }} -X main.builtBy=datalift
 
-archives:
-  - name_template: '{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
-    replacements:
-      386: i386
-    format_overrides:
-      - goos: windows
-        format: zip
-    files:
-      - README.md
-      - LICENSE
-      - completions/*
+universal_binaries:
+  - replace: false
 
 checksum:
   name_template: 'checksums.txt'
 
-snapshot:
-  name_template: "{{ .Tag }}-next"
 
 changelog:
   sort: asc
@@ -83,17 +80,45 @@ changelog:
     - title: Other work
       order: 9999
 
+archives:
+  - name_template: >-
+      {{ .ProjectName }}_{{ .Version }}_
+      {{- if eq .Os "darwin" }}macOS
+      {{- else if eq .Os "linux" }}Linux
+      {{- else if eq .Os "openbsd" }}OpenBSD
+      {{- else if eq .Os "netbsd" }}NetBSD
+      {{- else if eq .Os "freebsd" }}FreeBSD
+      {{- else if eq .Os "dragonfly" }}DragonFlyBSD
+      {{- else}}{{- .Os }}{{ end }}-
+      {{- if eq .Arch "amd64" }}64bit
+      {{- else if eq .Arch "arm" }}ARM
+      {{- else if eq .Arch "arm64" }}ARM64
+      {{- else if eq .Arch "ppc64le" }}PPC64LE
+      {{- else }}{{ .Arch }}{{ end }}
+    format_overrides:
+      - goos: windows
+        format: zip
+    builds_info:
+      group: root
+      owner: root
+    files:
+      - README.md
+      - LICENSE
+      - completions/*
+      - manpages/*
+
 brews:
-  - name: datalift
-    tap:
+  - tap:
       owner: DataliftHQ
       name: homebrew-datalift
+    folder: Formula
+    goarm: "7"
+    homepage: https://datalift.io/
+    description: Datalift CLI utility
+    license: MPL-2.0
     commit_author:
       name: datalift-ci
       email: support@datalift.io
-    folder: Formula
-    homepage: https://datalift.io/
-    description: Datalift CLI utility
     test: |
       system "#{bin}/datalift --version"
     dependencies:
@@ -102,4 +127,19 @@ brews:
       - name: git
     install: |-
       bin.install "datalift"
+      bash_completion.install "completions/datalift.bash" => "datalift"
+      zsh_completion.install "completions/datalift.zsh" => "_datalift"
+      fish_completion.install "completions/datalift.fish"
+      man1.install "manpages/datalift.1.gz"
     caveats: "❤ Thanks for installing the Datalift CLI!"
+
+milestones:
+  - close: true
+
+release:
+  footer: |
+    **Full Changelog**: https://github.com/DataliftHQ/datalift-cli/compare/{{ .PreviousTag }}...{{ .Tag }}
+
+    ## Helping out
+
+    This release is only possible thanks to **all** the support of some **awesome people**!
