@@ -124,6 +124,53 @@ brews:
       man1.install "manpages/datalift.1.gz"
     caveats: "❤ Thanks for installing the Datalift!"
 
+dockers:
+  - image_templates:
+      - "ghcr.io/DataliftHQ/datalift:{{ .Tag }}-amd64"
+    dockerfile: Dockerfile
+    use: buildx
+    build_flag_templates:
+      - "--pull"
+      - '--label=io.artifacthub.package.maintainers=[{"name":"Datalift","email":"support@datalift.io"}]'
+      - "--label=io.artifacthub.package.license=MPL-2.0"
+      - "--label=org.opencontainers.image.description=Platform Orchestrator that helps developers build, deploy, and manage their applications more quickly and easily."
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.name={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+      - "--label=org.opencontainers.image.source={{.GitURL}}"
+      - "--platform=linux/amd64"
+    extra_files:
+      - scripts/entrypoint.sh
+  - image_templates:
+      - "ghcr.io/DataliftHQ/datalift:{{ .Tag }}-arm64"
+    dockerfile: Dockerfile
+    use: buildx
+    build_flag_templates:
+      - "--pull"
+      - '--label=io.artifacthub.package.maintainers=[{"name":"Datalift","email":"support@datalift.io"}]'
+      - "--label=io.artifacthub.package.license=MPL-2.0"
+      - "--label=org.opencontainers.image.description=Platform Orchestrator that helps developers build, deploy, and manage their applications more quickly and easily."
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.name={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+      - "--label=org.opencontainers.image.source={{.GitURL}}"
+      - "--platform=linux/arm64"
+    goarch: arm64
+    extra_files:
+      - scripts/entrypoint.sh
+
+docker_manifests:
+  - name_template: "ghcr.io/DataliftHQ/datalift:{{ .Tag }}"
+    image_templates:
+      - "ghcr.io/DataliftHQ/datalift:{{ .Tag }}-amd64"
+      - "ghcr.io/DataliftHQ/datalift:{{ .Tag }}-arm64"
+  - name_template: "ghcr.io/DataliftHQ/datalift:latest"
+    image_templates:
+      - "ghcr.io/DataliftHQ/datalift:{{ .Tag }}-amd64"
+      - "ghcr.io/DataliftHQ/datalift:{{ .Tag }}-arm64"
+
 nfpms:
   - id: datalift
     file_name_template: >-
