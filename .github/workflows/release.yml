@@ -61,4 +61,3 @@ jobs:
           distribution: goreleaser
           version: latest
           args: release --clean
-
