@@ -126,8 +126,7 @@ brews:
     caveats: "❤ Thanks for installing the Datalift!"
 
 nix:
-  - name: datalift
-    repository:
+  - repository:
       owner: DataliftHQ
       name: nur
     homepage: https://datalift.io
